@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class RestExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> exceptionHandler(Exception ex) {
+	public ResponseEntity<String> generalExceptionHandler(Exception ex) {
 		return new ResponseEntity<>(ex.getMessage(), INTERNAL_SERVER_ERROR);
 	}
 }
