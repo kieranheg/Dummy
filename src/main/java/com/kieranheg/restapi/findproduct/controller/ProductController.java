@@ -19,7 +19,7 @@ public class ProductController {
     }
     
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable Integer id) {
+    public ResponseEntity<?> getProduct(final @PathVariable Integer id) {
         return productService.findById(id)
                 .map(product -> {
                     try {

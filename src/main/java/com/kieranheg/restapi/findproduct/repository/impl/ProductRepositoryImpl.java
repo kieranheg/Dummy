@@ -1,6 +1,7 @@
-package com.kieranheg.restapi.findproduct.repository;
+package com.kieranheg.restapi.findproduct.repository.impl;
 
 import com.kieranheg.restapi.findproduct.model.Product;
+import com.kieranheg.restapi.findproduct.repository.ProductRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -10,12 +11,12 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 @Repository
-public class ProductRepositoryImpl implements ProductRepository {
+class ProductRepositoryImpl implements ProductRepository {
     
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     
-    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public ProductRepositoryImpl(final JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         
         // Build a SimpleJdbcInsert object from the specified data source
@@ -25,7 +26,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
     
     @Override
-    public Optional<Product> findById(Integer id) {
+    public Optional<Product> findById(final Integer id) {
         try {
             Product product = jdbcTemplate.queryForObject("SELECT * FROM products WHERE id = ?",
                     new Object[]{id},

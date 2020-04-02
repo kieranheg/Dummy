@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
     
     @Override
-    public Optional<Product> findById(Integer id) {
+    public Optional<Product> findById(final Integer id) {
         return productRepository.findById(id);
     }
 }
