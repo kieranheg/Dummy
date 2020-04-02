@@ -1,0 +1,8 @@
+test {
+    include 'com/kieranheg/restapi/**'
+    exclude 'com/kieranheg/restapi/integration'
+    testLogging {
+        events = ['passed', 'failed']
+    }
+    useJUnitPlatform()
+}

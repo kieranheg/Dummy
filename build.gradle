@@ -1,0 +1,46 @@
+buildscript {
+    ext {
+        // ref: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot
+        springBootVersion = "2.2.6.RELEASE"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: 'groovy'
+apply plugin: "idea"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+
+// test scripts
+apply from: "$projectDir/gradle/unitTest.gradle"
+apply from: "$projectDir/gradle/integrationTest.gradle"
+
+group "com.kieranheg"
+version "1.0-SNAPSHOT"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation 'org.springframework:spring-web'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}

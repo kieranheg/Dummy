@@ -1,0 +1,7 @@
+task itest(type: Test) {
+    include 'com/kieranheg/integration/**'
+    testLogging {
+        events = ['passed', 'failed']
+    }
+    useJUnitPlatform()
+}
