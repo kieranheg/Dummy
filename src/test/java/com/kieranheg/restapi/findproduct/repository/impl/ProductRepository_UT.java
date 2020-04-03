@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,9 +21,6 @@ public class ProductRepository_UT {
     public static final String CAN_FIND_ID_1 = "1234567890";
     public static final String CAN_FIND_ID_2 = "9876543210";
     public static final String NOT_FOUND_ID = "1737737737";
-    
-    @Autowired
-    private DataSource dataSource;
     
     @Autowired
     private ProductRepositoryImpl productRepository;
