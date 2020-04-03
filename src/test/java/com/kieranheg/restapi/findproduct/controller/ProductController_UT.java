@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ProductController_UT {
-    public static final String FOUND_ID = "1234567890";
+    public static final String CAN_FIND_ID = "1234567890";
     public static final String NOT_FOUND_ID = "1737737737";
     public static final String BAD_PARAM_ID = "26";
     
@@ -48,17 +48,17 @@ public class ProductController_UT {
     @Test
     @DisplayName("GET for valid product id - Ok")
     void givenValidProductIdReturnsProduct() throws Exception {
-        Product mockProduct = Product.builder().id(FOUND_ID).name("Sample Product").quantity(99).build();
-        given(productService.findById(FOUND_ID)).willReturn(Optional.of(mockProduct));
+        Product mockProduct = Product.builder().id(CAN_FIND_ID).name("Sample Product").quantity(99).build();
+        given(productService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockProduct));
     
-        mockMvc.perform(get("/product/{id}", FOUND_ID))
+        mockMvc.perform(get("/product/{id}", CAN_FIND_ID))
                 // Validate the response code and content type
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 // Validate the headers
                 .andExpect(header().string(HttpHeaders.LOCATION, "/product/1234567890"))
                 // Validate the returned fields
-                .andExpect(jsonPath("$.id", is(FOUND_ID)))
+                .andExpect(jsonPath("$.id", is(CAN_FIND_ID)))
                 .andExpect(jsonPath("$.name", is("Sample Product")))
                 .andExpect(jsonPath("$.quantity", is(99)));
     }
