@@ -26,13 +26,13 @@ class ProductRepositoryImpl implements ProductRepository {
     }
     
     @Override
-    public Optional<Product> findById(final Integer id) {
+    public Optional<Product> findById(final String id) {
         try {
             Product product = jdbcTemplate.queryForObject("SELECT * FROM products WHERE id = ?",
                     new Object[]{id},
                     (rs, rowNum) -> {
                         return Product.builder()
-                                .id(rs.getInt("id"))
+                                .id(rs.getString("id"))
                                 .name(rs.getString("name"))
                                 .quantity(rs.getInt("quantity"))
                                 .build();

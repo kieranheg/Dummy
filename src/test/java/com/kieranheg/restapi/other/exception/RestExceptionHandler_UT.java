@@ -13,7 +13,7 @@ public class RestExceptionHandler_UT {
     @DisplayName("Catch any unhandled Exception and return Internal Server Error 500")
     void givenUnhandledServerExceptionReturnInternalServerError()  {
         ResponseEntity errorResponse = new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-        ResponseEntity actualResponse = new RestExceptionHandler().generalExceptionHandler(new Exception());
+        ResponseEntity actualResponse = new RestExceptionHandler().defaultExceptionHandler(new Exception());
         
         assertThat(actualResponse.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
         assertThat(actualResponse.getStatusCode()).isEqualTo(errorResponse.getStatusCode());

@@ -16,7 +16,7 @@ class ProductServiceImpl implements ProductService {
     }
     
     @Override
-    public Optional<Product> findById(final Integer id) {
+    public Optional<Product> findById(final String id) {
         return productRepository.findById(id);
     }
 }
