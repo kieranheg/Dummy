@@ -1,0 +1,7 @@
+products:
+  - id: 1234567890
+    name: "Dummy Product 1"
+    quantity: 987
+  - id: 9876543210
+    name: "Dummy Product 2"
+    quantity: 321
