@@ -2,7 +2,7 @@ package com.kieranheg.restapi.findproduct.controller;
 
 import com.kieranheg.restapi.findproduct.model.Product;
 import com.kieranheg.restapi.findproduct.service.ProductService;
-import com.kieranheg.restapi.other.exception.RestExceptionHandler;
+import com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

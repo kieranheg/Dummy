@@ -1,4 +1,4 @@
-package com.kieranheg.restapi.other.exception;
+package com.kieranheg.restapi.auxiliary.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

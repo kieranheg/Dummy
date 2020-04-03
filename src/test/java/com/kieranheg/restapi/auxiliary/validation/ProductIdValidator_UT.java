@@ -1,4 +1,4 @@
-package com.kieranheg.restapi.other.validator;
+package com.kieranheg.restapi.auxiliary.validation;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

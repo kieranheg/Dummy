@@ -1,7 +1,7 @@
 package com.kieranheg.restapi.findproduct.controller;
 
 import com.kieranheg.restapi.findproduct.service.ProductService;
-import com.kieranheg.restapi.other.validator.ValidProductId;
+import com.kieranheg.restapi.auxiliary.validation.ValidProductId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

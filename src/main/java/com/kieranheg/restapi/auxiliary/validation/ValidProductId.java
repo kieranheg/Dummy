@@ -1,4 +1,4 @@
-package com.kieranheg.restapi.other.validator;
+package com.kieranheg.restapi.auxiliary.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

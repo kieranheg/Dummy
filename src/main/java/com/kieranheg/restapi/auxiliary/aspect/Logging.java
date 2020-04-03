@@ -1,4 +1,4 @@
-package com.kieranheg.restapi.other.aspect;
+package com.kieranheg.restapi.auxiliary.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -23,7 +23,7 @@ public class Logging {
         log.info(PREFIX + "Finished executing " + joinPoint.getSignature().getName() + " method in the " + joinPoint.getSignature().getDeclaringType().getSimpleName());
     }
     
-    @Before("execution(* com.kieranheg.restapi.other.exception.RestExceptionHandler.*(..))")
+    @Before("execution(* com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler.*(..))")
     public void beforeRestExceptionHandler(final JoinPoint joinPoint){
         Exception ex = (Exception) joinPoint.getArgs()[0];
         log.error(PREFIX + "The following exception was caught by " + joinPoint.getSignature().getName() +

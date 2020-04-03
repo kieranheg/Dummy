@@ -1,4 +1,4 @@
-package com.kieranheg.restapi.other.exception;
+package com.kieranheg.restapi.auxiliary.exception;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
