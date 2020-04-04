@@ -20,8 +20,8 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductService_UT {
-    public static final String CAN_FIND_ID = "1234567890";
-    public static final String NOT_FOUND_ID = "1737737737";
+    private static final String CAN_FIND_ID = "1234567890";
+    private static final String NOT_FOUND_ID = "1737737737";
     
     @Mock
     private ProductRepository productRepository;

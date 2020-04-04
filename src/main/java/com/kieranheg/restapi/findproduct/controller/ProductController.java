@@ -1,7 +1,7 @@
 package com.kieranheg.restapi.findproduct.controller;
 
-import com.kieranheg.restapi.findproduct.service.ProductService;
 import com.kieranheg.restapi.auxiliary.validation.ValidProductId;
+import com.kieranheg.restapi.findproduct.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +22,7 @@ public class ProductController {
     }
     
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProduct(final @PathVariable @ValidProductId String id) {
+    public ResponseEntity<?> getProduct(final @PathVariable("id") @ValidProductId String id) {
         return productService.findById(id)
                 .map(product -> {
                     try {

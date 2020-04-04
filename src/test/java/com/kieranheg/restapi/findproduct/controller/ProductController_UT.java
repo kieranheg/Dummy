@@ -1,8 +1,8 @@
 package com.kieranheg.restapi.findproduct.controller;
 
+import com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler;
 import com.kieranheg.restapi.findproduct.model.Product;
 import com.kieranheg.restapi.findproduct.service.ProductService;
-import com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,9 +27,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ProductController_UT {
-    public static final String CAN_FIND_ID = "1234567890";
-    public static final String NOT_FOUND_ID = "1737737737";
-    public static final String BAD_PARAM_ID = "26";
+    private static final String CAN_FIND_ID = "1234567890";
+    private static final String NOT_FOUND_ID = "1737737737";
+    private static final String BAD_PARAM_ID = "26";
     
     @Mock
     private ProductService productService;

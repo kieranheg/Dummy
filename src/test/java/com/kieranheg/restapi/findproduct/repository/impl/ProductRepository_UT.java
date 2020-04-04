@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @ExtendWith({DBUnitExtension.class, SpringExtension.class})
 @SpringBootTest
 public class ProductRepository_UT {
-    public static final String CAN_FIND_ID_1 = "1234567890";
-    public static final String CAN_FIND_ID_2 = "9876543210";
-    public static final String NOT_FOUND_ID = "1737737737";
+    private static final String CAN_FIND_ID_1 = "1234567890";
+    private static final String CAN_FIND_ID_2 = "9876543210";
+    private static final String NOT_FOUND_ID = "1737737737";
     
     @Autowired
     private ProductRepositoryImpl productRepository;
