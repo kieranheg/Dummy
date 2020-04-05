@@ -15,7 +15,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @ExtendWith({DBUnitExtension.class, SpringExtension.class})
 @ContextConfiguration(classes = {RestApi.class})
@@ -60,6 +60,7 @@ public class Product_IT {
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
+        softly.assertThat(response.getHeaders().getContentType()).isEqualTo(APPLICATION_JSON);
         softly.assertThat(response.getBody()).isNotNull();
         softly.assertThat(response.getBody().getId()).isEqualTo(CAN_FIND_ID_1);
         softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Product 1");
@@ -130,7 +131,7 @@ public class Product_IT {
     
     private void setUpRequestEntity() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(APPLICATION_JSON);
         requestEntity = new HttpEntity<>("{}", headers);
     }
 }

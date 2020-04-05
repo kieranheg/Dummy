@@ -3,6 +3,7 @@ package com.kieranheg.restapi.auxiliary.exception;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -15,6 +16,15 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 public class RestExceptionHandler_UT {
+    
+    @Test
+    @DisplayName("Catch any missing params Exceptions and return Bad Request 400")
+    void giveMissingParamNoHandlerFoundExceptionReturnBadRequest()  {
+        NoHandlerFoundException noHandlerFoundException = mock(NoHandlerFoundException.class);
+        ResponseEntity actualResponse = new RestExceptionHandler().noHandlerFoundExceptionHandler(noHandlerFoundException);
+        
+        assertThat(actualResponse.getStatusCode()).isEqualTo(BAD_REQUEST);
+    }
     
     @Test
     @DisplayName("Catch any validation Constraint Violation Exception and return Bad Request 400")

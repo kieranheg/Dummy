@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -23,6 +22,8 @@ import java.util.Set;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,10 +52,11 @@ public class ProductController_UT {
         Product mockProduct = Product.builder().id(CAN_FIND_ID).name("Sample Product").quantity(99).build();
         given(productService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockProduct));
     
-        mockMvc.perform(get("/product/{id}", CAN_FIND_ID))
+        mockMvc.perform(get("/product/{id}", CAN_FIND_ID)
+                .contentType(APPLICATION_JSON))
                 // Validate the response code and content type
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 // Validate the headers
                 .andExpect(header().string(HttpHeaders.LOCATION, "/product/1234567890"))
                 // Validate the returned fields
@@ -68,7 +70,8 @@ public class ProductController_UT {
     void givenNonExistentProductIdReturnsProductNotFound() throws Exception {
         given(productService.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
-        mockMvc.perform(get("/product/{id}", NOT_FOUND_ID))
+        mockMvc.perform(get("/product/{id}", NOT_FOUND_ID)
+                .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
     
@@ -81,7 +84,8 @@ public class ProductController_UT {
         
         given(productService.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
         
-        mockMvc.perform(get("/product/{id}", BAD_PARAM_ID))
+        mockMvc.perform(get("/product/{id}", BAD_PARAM_ID)
+                .contentType(APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 }
