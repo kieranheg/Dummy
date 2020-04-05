@@ -1,7 +1,7 @@
-package com.kieranheg.restapi.findproduct.repository.impl;
+package com.kieranheg.restapi.getorder.repository.impl;
 
-import com.kieranheg.restapi.findproduct.model.Product;
-import com.kieranheg.restapi.findproduct.repository.ProductRepository;
+import com.kieranheg.restapi.getorder.model.Order;
+import com.kieranheg.restapi.getorder.repository.OrderRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -11,33 +11,33 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 @Repository
-class ProductRepositoryImpl implements ProductRepository {
+class OrderRepositoryImpl implements OrderRepository {
     
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     
-    public ProductRepositoryImpl(final JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public OrderRepositoryImpl(final JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         
         // Build a SimpleJdbcInsert object from the specified data source
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("products")
+                .withTableName("orders")
                 .usingGeneratedKeyColumns("id");
     }
     
     @Override
-    public Optional<Product> findById(final String id) {
+    public Optional<Order> findById(final String id) {
         try {
-            Product product = jdbcTemplate.queryForObject("SELECT * FROM products WHERE id = ?",
+            Order order = jdbcTemplate.queryForObject("SELECT * FROM orders WHERE id = ?",
                     new Object[]{id},
                     (rs, rowNum) -> {
-                        return Product.builder()
+                        return Order.builder()
                                 .id(rs.getString("id"))
                                 .name(rs.getString("name"))
                                 .quantity(rs.getInt("quantity"))
                                 .build();
                     });
-            return Optional.of(product);
+            return Optional.of(order);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }

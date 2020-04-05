@@ -1,7 +1,7 @@
-package com.kieranheg.restapi.findproduct.controller;
+package com.kieranheg.restapi.getorder.controller;
 
-import com.kieranheg.restapi.auxiliary.validation.ValidProductId;
-import com.kieranheg.restapi.findproduct.service.ProductService;
+import com.kieranheg.restapi.auxiliary.validation.ValidOrderId;
+import com.kieranheg.restapi.getorder.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,22 +14,22 @@ import java.net.URISyntaxException;
 
 @RestController
 @Validated
-public class ProductController {
-    private final ProductService productService;
+public class OrderController {
+    private final OrderService orderService;
     
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
     
-    @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProduct(final @PathVariable("id") @ValidProductId String id) {
-        return productService.findById(id)
-                .map(product -> {
+    @GetMapping("/order/{id}")
+    public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId String id) {
+        return orderService.findById(id)
+                .map(order -> {
                     try {
                         return ResponseEntity
                                 .ok()
-                                .location(new URI("/product/" + product.getId()))
-                                .body(product);
+                                .location(new URI("/order/" + order.getId()))
+                                .body(order);
                     } catch (URISyntaxException e ) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
                     }

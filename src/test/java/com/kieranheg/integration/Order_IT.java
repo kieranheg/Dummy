@@ -3,7 +3,7 @@ package com.kieranheg.integration;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
 import com.kieranheg.restapi.RestApi;
-import com.kieranheg.restapi.findproduct.model.Product;
+import com.kieranheg.restapi.getorder.model.Order;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,9 +29,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @ContextConfiguration(classes = {RestApi.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("inttest")
-public class Product_IT {
+public class Order_IT {
     private static final String SERVER_URL = "http://localhost:";
-    private static final String RESOURCE_URL = "/product/";
+    private static final String RESOURCE_URL = "/order/";
     
     private static final String CAN_FIND_ID_1 = "1234567890";
     private static final String CAN_FIND_ID_2 = "9876543210";
@@ -44,56 +44,56 @@ public class Product_IT {
     private HttpEntity<Object> requestEntity;
     
     @BeforeEach
-    public void beforeEach() throws Exception {
+    public void beforeEach() {
         testRestTemplate = new TestRestTemplate();
         setUpRequestEntity();
     }
     
     @Test
-    @DataSet("products.yml")
+    @DataSet("orders.yml")
     @DisplayName("Test findById with valid ID - success")
-    public void givenValidProductIdRepositoryReturnsProduct() {
+    public void givenValidOrderIdRepositoryReturnsOrder() {
         String baseUrl = SERVER_URL + port + RESOURCE_URL + CAN_FIND_ID_1;
     
-        ResponseEntity<Product> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Product>() {});
+        ResponseEntity<Order> response =
+                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
         softly.assertThat(response.getHeaders().getContentType()).isEqualTo(APPLICATION_JSON);
         softly.assertThat(response.getBody()).isNotNull();
         softly.assertThat(response.getBody().getId()).isEqualTo(CAN_FIND_ID_1);
-        softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Product 1");
+        softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Order 1");
         softly.assertThat(response.getBody().getQuantity()).isEqualTo(987);
         softly.assertAll();
     }
     
     @Test
-    @DataSet("products.yml")
+    @DataSet("orders.yml")
     @DisplayName("Test findById with a second valid ID - success")
-    public void givenSecondValidProductIdRepositoryReturnsProduct() {
+    public void givenSecondValidOrderIdRepositoryReturnsOrder() {
         String baseUrl = SERVER_URL + port + RESOURCE_URL + CAN_FIND_ID_2;
         
-        ResponseEntity<Product> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Product>() {});
+        ResponseEntity<Order> response =
+                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
         softly.assertThat(response.getBody()).isNotNull();
         softly.assertThat(response.getBody().getId()).isEqualTo(CAN_FIND_ID_2);
-        softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Product 2");
+        softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Order 2");
         softly.assertThat(response.getBody().getQuantity()).isEqualTo(321);
         softly.assertAll();
     }
     
     @Test
-    @DataSet("products.yml")
+    @DataSet("orders.yml")
     @DisplayName("Test findById with Non Existent ID - fails")
-    public void givenNonExistentProductIdRepositoryReturnsNotFound() {
+    public void givenNonExistentOrderIdRepositoryReturnsNotFound() {
         String baseUrl = SERVER_URL + port + RESOURCE_URL + NOT_FOUND_ID;
         
-        ResponseEntity<Product> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Product>() {});
+        ResponseEntity<Order> response =
+                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(NOT_FOUND);
@@ -102,9 +102,9 @@ public class Product_IT {
     }
     
     @Test
-    @DataSet("products.yml")
+    @DataSet("orders.yml")
     @DisplayName("Test findById with invalid ID param - fails")
-    public void givenInvalidProductIdRepositoryReturnsBadRequest() {
+    public void givenInvalidOrderIdRepositoryReturnsBadRequest() {
         String baseUrl = SERVER_URL + port + RESOURCE_URL + INVALID_ID;
         
         ResponseEntity<String> response =
@@ -112,15 +112,15 @@ public class Product_IT {
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
-        softly.assertThat(response.getBody()).isEqualTo("getProduct.id: Product id '19' is invalid");
+        softly.assertThat(response.getBody()).isEqualTo("getOrder.id: Order id '19' is invalid");
         softly.assertAll();
     }
     
     
     @Test
-    @DataSet("products.yml")
+    @DataSet("orders.yml")
     @DisplayName("Test findById with missing ID param - fails")
-    public void givenMissingProductIdRepositoryReturnsBadRequest() {
+    public void givenMissingOrderIdRepositoryReturnsBadRequest() {
         String baseUrl = SERVER_URL + port + RESOURCE_URL;
         
         ResponseEntity<String> response =

@@ -11,10 +11,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
-@Constraint(validatedBy = ProductIdValidator.class)
-public @interface ValidProductId {
+@Constraint(validatedBy = OrderIdValidator.class)
+public @interface ValidOrderId {
     
-    String message() default "Product id '${validatedValue}' is invalid";
+    String message() default "Order id '${validatedValue}' is invalid";
     
     Class<?>[] groups() default { };
     
