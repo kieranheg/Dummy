@@ -59,8 +59,8 @@ public class OrderService_UT {
     void givenNonExistentOrderIdServiceReturnsNotFound() {
         given(orderRepository.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
-        Optional<Order> returnedService = orderService.findById(NOT_FOUND_ID);
+        Optional<Order> orderReturnedByBadId = orderService.findById(NOT_FOUND_ID);
         
-        assertFalse(returnedService.isPresent(), "Service shouldn't be found");
+        assertFalse(orderReturnedByBadId.isPresent(), "Order Id shouldn't be found");
     }
 }

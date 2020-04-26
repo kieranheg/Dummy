@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith({DBUnitExtension.class, SpringExtension.class})
 @SpringBootTest
@@ -55,9 +56,8 @@ public class OrderRepository_UT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with Non Existent ID - fails")
     void givenNonExistentOrderIdRepositoryReturnsNotFound() {
-        Optional<Order> orderResultSet = orderRepository.findById(NOT_FOUND_ID);
+        Optional<Order> notFoundorderResultSet = orderRepository.findById(NOT_FOUND_ID);
         
-        // Validate that we found it
-        assertFalse(orderResultSet.isPresent(), "should be not be found for Order ID " + NOT_FOUND_ID);
+        assertFalse(notFoundorderResultSet.isPresent(), "should not be found for OrderID " + NOT_FOUND_ID);
     }
 }
