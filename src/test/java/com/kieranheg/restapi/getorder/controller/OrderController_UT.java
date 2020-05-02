@@ -1,5 +1,6 @@
 package com.kieranheg.restapi.getorder.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler;
 import com.kieranheg.restapi.getorder.model.Order;
 import com.kieranheg.restapi.getorder.service.OrderService;
@@ -32,6 +33,8 @@ public class OrderController_UT {
     private static final String NOT_FOUND_ID = "1737737737";
     private static final String BAD_PARAM_ID = "26";
     
+    ObjectMapper mapper = new ObjectMapper();
+    
     @Mock
     private OrderService orderService;
     
@@ -50,10 +53,13 @@ public class OrderController_UT {
     @DisplayName("GET for valid order id - Ok")
     void givenValidOrderIdReturnsOrder() throws Exception {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Sample Order").quantity(99).build();
+        String mockOrderRequestJson = mapper.writeValueAsString(mockOrder);
+        
         given(orderService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
     
         mockMvc.perform(get("/order/{id}", CAN_FIND_ID)
-                .contentType(APPLICATION_JSON))
+                .contentType(APPLICATION_JSON)
+                .content(mockOrderRequestJson))
                 // Validate the response code and content type
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
