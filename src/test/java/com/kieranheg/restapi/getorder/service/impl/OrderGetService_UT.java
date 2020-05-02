@@ -1,7 +1,7 @@
 package com.kieranheg.restapi.getorder.service.impl;
 
 import com.kieranheg.restapi.getorder.model.Order;
-import com.kieranheg.restapi.getorder.repository.OrderRepository;
+import com.kieranheg.restapi.getorder.repository.OrderGetRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,21 +21,21 @@ import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class OrderService_UT {
+public class OrderGetService_UT {
     private static final String CAN_FIND_ID = "1234567890";
     private static final String NOT_FOUND_ID = "1737737737";
     
     @Mock
-    private OrderRepository orderRepository;
+    private OrderGetRepository orderGetRepository;
     
     @InjectMocks
-    private OrderServiceImpl orderService;
+    private OrderGetServiceImpl orderService;
     
     @Test
     @DisplayName("Test findById - success")
     void givenValidOrderIdServiceReturnsService() {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Dummy Order").quantity(99).build();
-        given(orderRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(orderGetRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
     
         Optional<Order> returnedService = orderService.findById(CAN_FIND_ID);
     
@@ -49,17 +49,17 @@ public class OrderService_UT {
     @DisplayName("Test findById calls the repository once - success")
     void givenValidOrderIdServiceCallsRepositoryOnce() {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Dummy Order").quantity(99).build();
-        given(orderRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(orderGetRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
         
         orderService.findById(CAN_FIND_ID);
     
-        verify(orderRepository, times(1)).findById(anyString());
+        verify(orderGetRepository, times(1)).findById(anyString());
     }
     
     @Test
     @DisplayName("Test findById - Not Found")
     void givenNonExistentOrderIdServiceReturnsNotFound() {
-        given(orderRepository.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
+        given(orderGetRepository.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
         Optional<Order> orderReturnedByBadId = orderService.findById(NOT_FOUND_ID);
         

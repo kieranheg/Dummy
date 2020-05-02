@@ -4,6 +4,6 @@ import com.kieranheg.restapi.getorder.model.Order;
 
 import java.util.Optional;
 
-public interface OrderRepository {
+public interface OrderGetRepository {
     Optional<Order> findById(final String id);
 }

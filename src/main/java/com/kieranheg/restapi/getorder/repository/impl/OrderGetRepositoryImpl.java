@@ -1,7 +1,7 @@
 package com.kieranheg.restapi.getorder.repository.impl;
 
 import com.kieranheg.restapi.getorder.model.Order;
-import com.kieranheg.restapi.getorder.repository.OrderRepository;
+import com.kieranheg.restapi.getorder.repository.OrderGetRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -11,12 +11,12 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 @Repository
-class OrderRepositoryImpl implements OrderRepository {
+class OrderGetRepositoryImpl implements OrderGetRepository {
     
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     
-    public OrderRepositoryImpl(final JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public OrderGetRepositoryImpl(final JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         
         // Build a SimpleJdbcInsert object from the specified data source

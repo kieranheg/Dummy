@@ -1,64 +1,43 @@
 package com.kieranheg.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.kieranheg.utils.JacksonMapperHelper.asJsonContentFromJsonString;
+import static com.kieranheg.utils.JacksonMapperHelper.asJsonString;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 public class JacksonMapper_UT {
-
+    private static final String EXPECTED_JSON = "[{\"name\":\"Hdr1\",\"value\":\"Value1\"},{\"name\":\"Hdr2\",\"value\":\"Value2\"}]";
+    private static final String HDR_1 = "Hdr1";
+    private static final String HDR_2 = "Hdr2";
+    private static final String VALUE_1 = "Value1";
+    private static final String VALUE_2 = "Value2";
+    
     @Test
     @DisplayName("Test serialize - success")
-    public void serialize() throws  IOException {
-        List<Header> headers = new ArrayList<>();
-        Header hdr1 = new Header("Hdr1", "Value1");
-        Header hdr2 = new Header("Hdr2", "Value2");
-        headers.add(hdr1);
-        headers.add(hdr2);
-        ObjectMapper mapper = new ObjectMapper();
-
-        String json = mapper.writeValueAsString(headers);
-        assertThat(json).isEqualTo("[{\"name\":\"Hdr1\",\"value\":\"Value1\"},{\"name\":\"Hdr2\",\"value\":\"Value2\"}]");
+    public void serialize() {
+        Header header1 = Header.builder().name(HDR_1).value(VALUE_1).build();
+        Header header2 = Header.builder().name(HDR_2).value(VALUE_2).build();
+    
+        assertThat(asJsonString(asList(header1, header2))).isEqualTo(EXPECTED_JSON);
     }
 
     @Test
     @DisplayName("Test deserialize - success")
-    public void deserialize() throws  IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        CollectionType mapCollectionType = mapper.getTypeFactory()
-                .constructCollectionType(List.class, Header.class);
-
-        String json = "[{\"name\":\"Hdr1\",\"value\":\"Value1\"},{\"name\":\"Hdr2\",\"value\":\"Value2\"}]";
-        List<Header> value = mapper.readValue(json, mapCollectionType);
-
-        assertThat(value.get(0).getName()).isEqualTo("Hdr1");
-        assertThat(value.get(0).getValue()).isEqualTo("Value1");
-        assertThat(value.get(1).getName()).isEqualTo("Hdr2");
-        assertThat(value.get(1).getValue()).isEqualTo("Value2");
+    public void deserialize() throws IOException {
+        List<Header> value = asJsonContentFromJsonString(EXPECTED_JSON);
+        
+        assertThat(value.get(0).getName()).isEqualTo(HDR_1);
+        assertThat(value.get(0).getValue()).isEqualTo(VALUE_1);
+        assertThat(value.get(1).getName()).isEqualTo(HDR_2);
+        assertThat(value.get(1).getValue()).isEqualTo(VALUE_2);
     }
 }
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-class Header {
-    @NotNull
-    private String name;
-    
-    @NotNull
-    private String value;
-}

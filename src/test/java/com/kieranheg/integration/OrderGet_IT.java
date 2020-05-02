@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @ContextConfiguration(classes = {RestApi.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("inttest")
-public class Order_IT {
+public class OrderGet_IT {
     private static final String SERVER_URL = "http://localhost:";
     private static final String RESOURCE_URL = "/order/";
     
@@ -116,7 +116,6 @@ public class Order_IT {
         softly.assertThat(response.getBody()).isEqualTo("getOrder.id: Order id '19' is invalid");
         softly.assertAll();
     }
-    
     
     @Test
     @DataSet("orders.yml")

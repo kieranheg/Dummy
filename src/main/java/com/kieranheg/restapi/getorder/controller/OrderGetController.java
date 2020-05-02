@@ -1,7 +1,7 @@
 package com.kieranheg.restapi.getorder.controller;
 
 import com.kieranheg.restapi.auxiliary.validation.ValidOrderId;
-import com.kieranheg.restapi.getorder.service.OrderService;
+import com.kieranheg.restapi.getorder.service.OrderGetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,16 +14,16 @@ import java.net.URISyntaxException;
 
 @RestController
 @Validated
-public class OrderController {
-    private final OrderService orderService;
+public class OrderGetController {
+    private final OrderGetService orderGetService;
     
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderGetController(OrderGetService orderGetService) {
+        this.orderGetService = orderGetService;
     }
     
     @GetMapping("/order/{id}")
     public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId String id) {
-        return orderService.findById(id)
+        return orderGetService.findById(id)
                 .map(order -> {
                     try {
                         return ResponseEntity

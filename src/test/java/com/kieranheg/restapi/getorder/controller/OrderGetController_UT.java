@@ -1,9 +1,8 @@
 package com.kieranheg.restapi.getorder.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kieranheg.restapi.auxiliary.exception.RestExceptionHandler;
 import com.kieranheg.restapi.getorder.model.Order;
-import com.kieranheg.restapi.getorder.service.OrderService;
+import com.kieranheg.restapi.getorder.service.OrderGetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.kieranheg.utils.JacksonMapperHelper.asJsonString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -30,36 +30,36 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-public class OrderController_UT {
+public class OrderGetController_UT {
     private static final String CAN_FIND_ID = "1234567890";
     private static final String NOT_FOUND_ID = "1737737737";
     private static final String BAD_PARAM_ID = "26";
+    private static final String ORDER_NAME = "Sample Order";
     
     @Mock
-    private OrderService orderService;
+    private OrderGetService orderGetService;
     
     @InjectMocks
-    private OrderController orderController;
+    private OrderGetController orderGetController;
     
     private MockMvc mockMvc;
     
     @BeforeEach
     public void BeforeEach() {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(orderController).setControllerAdvice(new RestExceptionHandler()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(orderGetController).setControllerAdvice(new RestExceptionHandler()).build();
     }
     
     @Test
     @DisplayName("GET for valid order id - Ok")
     void givenValidOrderIdReturnsOrder() throws Exception {
-        Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Sample Order").quantity(99).build();
-        String mockOrderRequestJson = new ObjectMapper().writeValueAsString(mockOrder);
+        Order mockOrder = Order.builder().id(CAN_FIND_ID).name(ORDER_NAME).quantity(99).build();
         
-        given(orderService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(orderGetService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
     
         mockMvc.perform(get("/order/{id}", CAN_FIND_ID)
                 .contentType(APPLICATION_JSON)
-                .content(mockOrderRequestJson))
+                .content(asJsonString(mockOrder)))
                 // Validate the response code and content type
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
@@ -67,14 +67,14 @@ public class OrderController_UT {
                 .andExpect(header().string(HttpHeaders.LOCATION, "/order/1234567890"))
                 // Validate the returned fields
                 .andExpect(jsonPath("$.id", is(CAN_FIND_ID)))
-                .andExpect(jsonPath("$.name", is("Sample Order")))
+                .andExpect(jsonPath("$.name", is(ORDER_NAME)))
                 .andExpect(jsonPath("$.quantity", is(99)));
     }
     
     @Test
     @DisplayName("GET for non existent order id - Not Found")
     void givenNonExistentOrderIdReturnsOrderNotFound() throws Exception {
-        given(orderService.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
+        given(orderGetService.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
         mockMvc.perform(get("/order/{id}", NOT_FOUND_ID)
                 .contentType(APPLICATION_JSON))
@@ -88,7 +88,7 @@ public class OrderController_UT {
         violations.add(mock(ConstraintViolation.class));
         ConstraintViolationException constraintViolationException = mock(ConstraintViolationException.class);
         
-        given(orderService.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
+        given(orderGetService.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
         
         mockMvc.perform(get("/order/{id}", BAD_PARAM_ID)
                 .contentType(APPLICATION_JSON))

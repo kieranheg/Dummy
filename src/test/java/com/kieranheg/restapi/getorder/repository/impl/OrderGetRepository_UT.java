@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@ExtendWith({DBUnitExtension.class})
-public class OrderRepository_UT {
+@ExtendWith(DBUnitExtension.class)
+public class OrderGetRepository_UT {
     private static final String CAN_FIND_ID_1 = "1234567890";
     private static final String CAN_FIND_ID_2 = "9876543210";
     private static final String NOT_FOUND_ID = "1737737737";
     
     @Autowired
-    private OrderRepositoryImpl orderRepository;
+    private OrderGetRepositoryImpl orderRepository;
     
     @Test
     @DataSet("orders.yml")
@@ -56,8 +56,8 @@ public class OrderRepository_UT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with Non Existent ID - fails")
     void givenNonExistentOrderIdRepositoryReturnsNotFound() {
-        Optional<Order> notFoundorderResultSet = orderRepository.findById(NOT_FOUND_ID);
+        Optional<Order> notFoundOrderResultSet = orderRepository.findById(NOT_FOUND_ID);
         
-        assertFalse(notFoundorderResultSet.isPresent(), "should not be found for OrderID " + NOT_FOUND_ID);
+        assertFalse(notFoundOrderResultSet.isPresent(), "should not be found for OrderID " + NOT_FOUND_ID);
     }
 }
