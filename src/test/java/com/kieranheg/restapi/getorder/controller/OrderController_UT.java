@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -28,12 +29,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ActiveProfiles("test")
 public class OrderController_UT {
     private static final String CAN_FIND_ID = "1234567890";
     private static final String NOT_FOUND_ID = "1737737737";
     private static final String BAD_PARAM_ID = "26";
-    
-    ObjectMapper mapper = new ObjectMapper();
     
     @Mock
     private OrderService orderService;
@@ -53,7 +53,7 @@ public class OrderController_UT {
     @DisplayName("GET for valid order id - Ok")
     void givenValidOrderIdReturnsOrder() throws Exception {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Sample Order").quantity(99).build();
-        String mockOrderRequestJson = mapper.writeValueAsString(mockOrder);
+        String mockOrderRequestJson = new ObjectMapper().writeValueAsString(mockOrder);
         
         given(orderService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
     

@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith({DBUnitExtension.class, SpringExtension.class})
+@ActiveProfiles("test")
 @SpringBootTest
+@ExtendWith({DBUnitExtension.class})
 public class OrderRepository_UT {
     private static final String CAN_FIND_ID_1 = "1234567890";
     private static final String CAN_FIND_ID_2 = "9876543210";

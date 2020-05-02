@@ -79,6 +79,7 @@ public class Order_IT {
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
+        softly.assertThat(response.getHeaders().getContentType()).isEqualTo(APPLICATION_JSON);
         softly.assertThat(response.getBody()).isNotNull();
         softly.assertThat(response.getBody().getId()).isEqualTo(CAN_FIND_ID_2);
         softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Order 2");
