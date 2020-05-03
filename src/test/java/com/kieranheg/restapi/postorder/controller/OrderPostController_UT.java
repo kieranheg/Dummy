@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("test")
 public class OrderPostController_UT {
-    private static final String ORDER_URL = "/order/new";
+    private static final String ORDER_URL = "/v1.0/order/new";
     private static final String POST_ORDER_ID = "1234567890";
     private static final String ORDER_NAME = "Sample Order";
     
@@ -64,5 +64,14 @@ public class OrderPostController_UT {
                 .andExpect(jsonPath("$.id", is(POST_ORDER_ID)))
                 .andExpect(jsonPath("$.name", is(ORDER_NAME)))
                 .andExpect(jsonPath("$.quantity", is(999)));
+    }
+    
+    @Test
+    @DisplayName("POST without order - Internal Server Error")
+    void givenNoOrderReturnsInternalServerError() throws Exception {
+        given(orderPostService.save(null)).willThrow(new RuntimeException("Something went wrong"));
+        
+        mockMvc.perform(post(ORDER_URL))
+                .andExpect(status().isInternalServerError());
     }
 }
