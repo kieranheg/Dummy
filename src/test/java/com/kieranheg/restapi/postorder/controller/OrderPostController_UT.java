@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = OrderPostController.class)
 public class OrderPostController_UT {
-    private static final String POST_ORDER_ID = "1234567890";
+    private static final Integer POST_ORDER_ID = 123456789;
     private static final String ORDER_NAME = "Sample Order";
-    private static final int ORDER_QUANTITY = 999;
+    private static final Integer ORDER_QUANTITY = 999;
     
     @MockBean
     private OrderPostService service;

@@ -29,7 +29,7 @@ public class OrderGetController {
     }
     
     @GetMapping(path = "{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId String id) {
+    public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId Integer id) {
         return service.findById(id)
                 .map(order -> {
                     try {

@@ -33,7 +33,7 @@ class OrderPostRepositoryImpl implements OrderPostRepository {
         
         Number newId = simpleJdbcInsert.executeAndReturnKey(parameters);
         
-        order.setId(newId.toString());
+        order.setId(newId.intValue());
         
         return order;
     }

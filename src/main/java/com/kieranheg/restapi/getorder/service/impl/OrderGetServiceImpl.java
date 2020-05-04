@@ -16,7 +16,7 @@ class OrderGetServiceImpl implements OrderGetService {
     }
     
     @Override
-    public Optional<Order> findById(final String id) {
+    public Optional<Order> findById(final Integer id) {
         return repo.findById(id);
     }
 }

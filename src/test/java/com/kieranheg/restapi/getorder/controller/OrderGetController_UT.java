@@ -28,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = OrderGetController.class)
 public class OrderGetController_UT {
-    private static final String CAN_FIND_ID = "1234567890";
-    private static final String NOT_FOUND_ID = "1737737737";
-    private static final String BAD_PARAM_ID = "26";
+    private static final Integer CAN_FIND_ID = 123456789;
+    private static final Integer NOT_FOUND_ID = 173773754;
+    private static final Integer BAD_PARAM_ID = 26;
+    private static final Integer QUANTITY_ORDERED = 99;
     private static final String ORDER_NAME = "Sample Order";
-    private static final int QUANTITY_ORDERED = 99;
     
     @MockBean
     private OrderGetService service;
@@ -69,7 +69,7 @@ public class OrderGetController_UT {
     void givenNonExistentOrderIdReturnsOrderNotFound() throws Exception {
         given(service.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
-        mockMvc.perform(get(baseUrl + "{id}", NOT_FOUND_ID)
+        mockMvc.perform(get(baseUrl + NOT_FOUND_ID)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

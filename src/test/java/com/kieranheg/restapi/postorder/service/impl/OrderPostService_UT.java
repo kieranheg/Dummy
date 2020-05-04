@@ -17,8 +17,9 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderPostService_UT {
-    private static final String SAVE_ID = "9876543210";
-    private static final int QUANTITY = 99;
+    private static final Integer SAVE_ID = 987654321;
+    private static final String DUMMY_ORDER_NAME = "Dummy Order";
+    private static final Integer QUANTITY = 99;
     
     @Mock
     private OrderPostRepository repo;
@@ -29,7 +30,7 @@ public class OrderPostService_UT {
     @Test
     @DisplayName("Test save product - success")
     void givenValidOrderServiceSavesAndReturnsOrder() {
-        Order mockOrder = Order.builder().id(SAVE_ID).name("Dummy Order").quantity(QUANTITY).build();
+        Order mockOrder = Order.builder().id(SAVE_ID).name(DUMMY_ORDER_NAME).quantity(QUANTITY).build();
         given(repo.save(any())).willReturn(mockOrder);
     
         Order savedOrder = service.save(mockOrder);
@@ -41,7 +42,7 @@ public class OrderPostService_UT {
     @Test
     @DisplayName("Test save product calls the repository once - success")
     void givenValidOrderServiceCallsRepositoryOnce() {
-        Order mockOrder = Order.builder().id(SAVE_ID).name("Dummy Order").quantity(QUANTITY).build();
+        Order mockOrder = Order.builder().id(SAVE_ID).name(DUMMY_ORDER_NAME).quantity(QUANTITY).build();
         given(repo.save(any())).willReturn(mockOrder);
         
         service.save(mockOrder);

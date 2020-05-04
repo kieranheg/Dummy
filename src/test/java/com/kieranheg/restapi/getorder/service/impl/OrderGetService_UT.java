@@ -13,15 +13,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderGetService_UT {
-    private static final String CAN_FIND_ID = "1234567890";
-    private static final String NOT_FOUND_ID = "1737737737";
+    private static final Integer CAN_FIND_ID = 123456789;
+    private static final Integer NOT_FOUND_ID = 173773773;
     
     @Mock
     private OrderGetRepository repo;
@@ -51,7 +51,7 @@ public class OrderGetService_UT {
         
         service.findById(CAN_FIND_ID);
     
-        verify(repo, times(1)).findById(anyString());
+        verify(repo, times(1)).findById(anyInt());
     }
     
     @Test

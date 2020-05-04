@@ -26,13 +26,13 @@ class OrderGetRepositoryImpl implements OrderGetRepository {
     }
     
     @Override
-    public Optional<Order> findById(final String id) {
+    public Optional<Order> findById(final Integer id) {
         try {
             Order order = jdbcTemplate.queryForObject("SELECT * FROM orders WHERE id = ?",
                     new Object[]{id},
                     (rs, rowNum) -> {
                         return Order.builder()
-                                .id(rs.getString("id"))
+                                .id(rs.getInt("id"))
                                 .name(rs.getString("name"))
                                 .quantity(rs.getInt("quantity"))
                                 .build();

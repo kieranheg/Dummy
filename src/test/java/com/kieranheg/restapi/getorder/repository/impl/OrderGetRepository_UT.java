@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @SpringBootTest
 @ExtendWith(DBUnitExtension.class)
 public class OrderGetRepository_UT {
-    private static final String CAN_FIND_ID_1 = "1234567890";
-    private static final String CAN_FIND_ID_2 = "9876543210";
-    private static final String NOT_FOUND_ID = "1737737737";
+    private static final Integer CAN_FIND_ID_1 = 123456789;
+    private static final Integer CAN_FIND_ID_2 = 987654321;
+    private static final Integer NOT_FOUND_ID = 173773773;
     
     @Autowired
     private OrderGetRepositoryImpl repo;
