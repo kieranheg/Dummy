@@ -2,12 +2,10 @@ package com.kieranheg.restapi.auxiliary.validation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@ActiveProfiles("test")
 public class OrderIdValidator_UT {
     private OrderIdValidator orderIdValidator = new OrderIdValidator();
 

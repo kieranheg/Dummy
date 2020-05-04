@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class OrderGetService_UT {
     private static final String CAN_FIND_ID = "1234567890";

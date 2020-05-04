@@ -9,15 +9,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
 @Validated
-@RequestMapping("/order/")
+@RequestMapping("${url.get-order}")
 public class OrderGetController {
+    
     private final OrderGetService orderGetService;
+    
+    @Value("${url.get-order}")
+    private String url;
     
     public OrderGetController(OrderGetService orderGetService) {
         this.orderGetService = orderGetService;
@@ -30,9 +35,9 @@ public class OrderGetController {
                     try {
                         return ResponseEntity
                                 .ok()
-                                .location(new URI("/order/" + order.getId()))
+                                .location(new URI(url + order.getId()))
                                 .body(order);
-                    } catch (URISyntaxException e ) {
+                    } catch (URISyntaxException e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
                     }
                 })

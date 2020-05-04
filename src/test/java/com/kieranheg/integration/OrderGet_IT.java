@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -16,33 +17,34 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @ExtendWith({DBUnitExtension.class, SpringExtension.class})
-@ContextConfiguration(classes = {RestApi.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("inttest")
+@SpringBootTest(classes = RestApi.class, webEnvironment = RANDOM_PORT)
 public class OrderGet_IT {
-    private static final String SERVER_URL = "http://localhost:";
-    private static final String RESOURCE_URL = "/order/";
-    
     private static final String CAN_FIND_ID_1 = "1234567890";
     private static final String CAN_FIND_ID_2 = "9876543210";
     private static final String NOT_FOUND_ID = "1737737737";
     private static final String INVALID_ID = "19";
+    private static final String MISSING_ORDER_ID = "";
+    
+    private static final String SERVER_URL = "http://localhost:";
     
     @LocalServerPort
     private int port;
+
+    @Value("${url.get-order}")
+    private String resourceUrl;
+    
     private TestRestTemplate testRestTemplate;
     private HttpEntity<Object> requestEntity;
-    
+
     @BeforeEach
     public void beforeEach() {
         testRestTemplate = new TestRestTemplate();
@@ -53,10 +55,8 @@ public class OrderGet_IT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with valid ID - success")
     public void givenValidOrderIdRepositoryReturnsOrder() {
-        String baseUrl = SERVER_URL + port + RESOURCE_URL + CAN_FIND_ID_1;
-    
         ResponseEntity<Order> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
+                testRestTemplate.exchange(buildUrl(CAN_FIND_ID_1), GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
@@ -72,10 +72,8 @@ public class OrderGet_IT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with a second valid ID - success")
     public void givenSecondValidOrderIdRepositoryReturnsOrder() {
-        String baseUrl = SERVER_URL + port + RESOURCE_URL + CAN_FIND_ID_2;
-        
         ResponseEntity<Order> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
+                testRestTemplate.exchange(buildUrl(CAN_FIND_ID_2), GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(OK);
@@ -91,10 +89,8 @@ public class OrderGet_IT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with Non Existent ID - fails")
     public void givenNonExistentOrderIdRepositoryReturnsNotFound() {
-        String baseUrl = SERVER_URL + port + RESOURCE_URL + NOT_FOUND_ID;
-        
         ResponseEntity<Order> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<Order>() {});
+                testRestTemplate.exchange(buildUrl(NOT_FOUND_ID), GET, requestEntity, new ParameterizedTypeReference<Order>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(NOT_FOUND);
@@ -106,10 +102,8 @@ public class OrderGet_IT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with invalid ID param - fails")
     public void givenInvalidOrderIdRepositoryReturnsBadRequest() {
-        String baseUrl = SERVER_URL + port + RESOURCE_URL + INVALID_ID;
-        
         ResponseEntity<String> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<String>() {});
+                testRestTemplate.exchange(buildUrl(INVALID_ID), GET, requestEntity, new ParameterizedTypeReference<String>() {});
         
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
@@ -121,14 +115,16 @@ public class OrderGet_IT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with missing ID param - fails")
     public void givenMissingOrderIdRepositoryReturnsBadRequest() {
-        String baseUrl = SERVER_URL + port + RESOURCE_URL;
-        
         ResponseEntity<String> response =
-                testRestTemplate.exchange(baseUrl, GET, requestEntity, new ParameterizedTypeReference<String>() {});
+                testRestTemplate.exchange(buildUrl(MISSING_ORDER_ID), GET, requestEntity, new ParameterizedTypeReference<String>() {});
         
         assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
     
+    private String buildUrl(final String resource) {
+        return SERVER_URL + port + resourceUrl + resource;
+    }
+
     private void setUpRequestEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_JSON);
