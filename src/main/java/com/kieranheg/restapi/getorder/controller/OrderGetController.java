@@ -19,18 +19,18 @@ import java.net.URISyntaxException;
 @RequestMapping("${url.get-order}")
 public class OrderGetController {
     
-    private final OrderGetService orderGetService;
+    private final OrderGetService service;
     
     @Value("${url.get-order}")
     private String url;
     
-    public OrderGetController(OrderGetService orderGetService) {
-        this.orderGetService = orderGetService;
+    public OrderGetController(OrderGetService service) {
+        this.service = service;
     }
     
     @GetMapping(path = "{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId String id) {
-        return orderGetService.findById(id)
+        return service.findById(id)
                 .map(order -> {
                     try {
                         return ResponseEntity

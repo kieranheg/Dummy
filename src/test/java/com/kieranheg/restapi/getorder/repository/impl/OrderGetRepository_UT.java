@@ -22,13 +22,13 @@ public class OrderGetRepository_UT {
     private static final String NOT_FOUND_ID = "1737737737";
     
     @Autowired
-    private OrderGetRepositoryImpl orderRepository;
+    private OrderGetRepositoryImpl repo;
     
     @Test
     @DataSet("orders.yml")
     @DisplayName("Test findById with valid ID - success")
     void givenValidOrderIdRepositoryReturnsOrder() {
-        Optional<Order> orderResultSet = orderRepository.findById(CAN_FIND_ID_1);
+        Optional<Order> orderResultSet = repo.findById(CAN_FIND_ID_1);
         
         Order mockOrder = Order.builder().id(CAN_FIND_ID_1).name("Dummy Order 1").quantity(987).build();
         SoftAssertions softly = new SoftAssertions();
@@ -41,7 +41,7 @@ public class OrderGetRepository_UT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with different valid ID - success")
     void givenSecondValidOrderIdRepositoryReturnsSecondOrder() {
-        Optional<Order> orderResultSet = orderRepository.findById(CAN_FIND_ID_2);
+        Optional<Order> orderResultSet = repo.findById(CAN_FIND_ID_2);
         
         Order mockOrder = Order.builder().id(CAN_FIND_ID_2).name("Dummy Order 2").quantity(321).build();
         SoftAssertions softly = new SoftAssertions();
@@ -54,7 +54,7 @@ public class OrderGetRepository_UT {
     @DataSet("orders.yml")
     @DisplayName("Test findById with Non Existent ID - fails")
     void givenNonExistentOrderIdRepositoryReturnsNotFound() {
-        Optional<Order> notFoundOrderResultSet = orderRepository.findById(NOT_FOUND_ID);
+        Optional<Order> notFoundOrderResultSet = repo.findById(NOT_FOUND_ID);
         
         assertFalse(notFoundOrderResultSet.isPresent(), "should not be found for OrderID " + NOT_FOUND_ID);
     }

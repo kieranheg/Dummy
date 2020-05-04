@@ -35,7 +35,7 @@ public class OrderGetController_UT {
     private static final int QUANTITY_ORDERED = 99;
     
     @MockBean
-    private OrderGetService orderGetService;
+    private OrderGetService service;
     
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ public class OrderGetController_UT {
     void givenValidOrderIdReturnsOrder() throws Exception {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name(ORDER_NAME).quantity(QUANTITY_ORDERED).build();
         
-        given(orderGetService.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(service.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
         
         mockMvc.perform(get(baseUrl + "{id}", CAN_FIND_ID)
                 .contentType(APPLICATION_JSON)
@@ -67,7 +67,7 @@ public class OrderGetController_UT {
     @Test
     @DisplayName("GET for non existent order id - Not Found")
     void givenNonExistentOrderIdReturnsOrderNotFound() throws Exception {
-        given(orderGetService.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
+        given(service.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
         mockMvc.perform(get(baseUrl + "{id}", NOT_FOUND_ID)
                 .contentType(APPLICATION_JSON))
@@ -81,7 +81,7 @@ public class OrderGetController_UT {
         violations.add(mock(ConstraintViolation.class));
         ConstraintViolationException constraintViolationException = mock(ConstraintViolationException.class);
         
-        given(orderGetService.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
+        given(service.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
         
         mockMvc.perform(get(baseUrl + "{id}", BAD_PARAM_ID)
                 .contentType(APPLICATION_JSON))

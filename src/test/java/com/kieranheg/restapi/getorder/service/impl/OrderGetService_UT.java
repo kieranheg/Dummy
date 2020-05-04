@@ -24,22 +24,22 @@ public class OrderGetService_UT {
     private static final String NOT_FOUND_ID = "1737737737";
     
     @Mock
-    private OrderGetRepository orderGetRepository;
+    private OrderGetRepository repo;
     
     @InjectMocks
-    private OrderGetServiceImpl orderService;
+    private OrderGetServiceImpl service;
     
     @Test
     @DisplayName("Test findById - success")
-    void givenValidOrderIdServiceReturnsService() {
+    void givenValidOrderIdServiceReturnsOrder() {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Dummy Order").quantity(99).build();
-        given(orderGetRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(repo.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
     
-        Optional<Order> returnedService = orderService.findById(CAN_FIND_ID);
+        Optional<Order> returnedOrder = service.findById(CAN_FIND_ID);
     
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(returnedService.isPresent());
-        softly.assertThat(returnedService.get()).isEqualTo(mockOrder);
+        softly.assertThat(returnedOrder.isPresent());
+        softly.assertThat(returnedOrder.get()).isEqualTo(mockOrder);
         softly.assertAll();
     }
     
@@ -47,19 +47,19 @@ public class OrderGetService_UT {
     @DisplayName("Test findById calls the repository once - success")
     void givenValidOrderIdServiceCallsRepositoryOnce() {
         Order mockOrder = Order.builder().id(CAN_FIND_ID).name("Dummy Order").quantity(99).build();
-        given(orderGetRepository.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
+        given(repo.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
         
-        orderService.findById(CAN_FIND_ID);
+        service.findById(CAN_FIND_ID);
     
-        verify(orderGetRepository, times(1)).findById(anyString());
+        verify(repo, times(1)).findById(anyString());
     }
     
     @Test
     @DisplayName("Test findById - Not Found")
     void givenNonExistentOrderIdServiceReturnsNotFound() {
-        given(orderGetRepository.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
+        given(repo.findById(NOT_FOUND_ID)).willReturn(Optional.empty());
         
-        Optional<Order> orderReturnedByBadId = orderService.findById(NOT_FOUND_ID);
+        Optional<Order> orderReturnedByBadId = service.findById(NOT_FOUND_ID);
         
         assertFalse(orderReturnedByBadId.isPresent(), "Order Id shouldn't be found");
     }

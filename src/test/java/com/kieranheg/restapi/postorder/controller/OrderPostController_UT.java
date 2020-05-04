@@ -25,7 +25,7 @@ public class OrderPostController_UT {
     private static final int ORDER_QUANTITY = 999;
     
     @MockBean
-    private OrderPostService orderPostService;
+    private OrderPostService service;
     
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +39,7 @@ public class OrderPostController_UT {
         Order postOrder = Order.builder().name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
         Order mockOrder = Order.builder().id(POST_ORDER_ID).name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
     
-        given(orderPostService.save(postOrder)).willReturn(mockOrder);
+        given(service.save(postOrder)).willReturn(mockOrder);
     
         mockMvc.perform(post(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class OrderPostController_UT {
     @Test
     @DisplayName("POST without order - Internal Server Error")
     void givenNoOrderReturnsInternalServerError() throws Exception {
-        given(orderPostService.save(null)).willThrow(new RuntimeException("Something went wrong"));
+        given(service.save(null)).willThrow(new RuntimeException("Something went wrong"));
         
         mockMvc.perform(post(baseUrl))
                 .andExpect(status().isInternalServerError());

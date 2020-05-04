@@ -19,18 +19,18 @@ import java.net.URISyntaxException;
 @RequestMapping("${url.post-order}")
 public class OrderPostController {
     
-    private final OrderPostService orderPostService;
+    private final OrderPostService service;
     
     @Value("${url.post-order}")
     private String url;
     
-    public OrderPostController(OrderPostService orderPostService) {
-        this.orderPostService = orderPostService;
+    public OrderPostController(OrderPostService service) {
+        this.service = service;
     }
     
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order newOrder = orderPostService.save(order);
+        Order newOrder = service.save(order);
         try {
             return ResponseEntity
                     .created(new URI(url + newOrder.getId()))

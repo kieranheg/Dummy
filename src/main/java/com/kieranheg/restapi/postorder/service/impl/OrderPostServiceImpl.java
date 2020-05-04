@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 class OrderPostServiceImpl implements OrderPostService {
-    private final OrderPostRepository orderPostRepository;
+    private final OrderPostRepository repo;
     
-    public OrderPostServiceImpl(final OrderPostRepository orderPostRepository) {
-        this.orderPostRepository = orderPostRepository;
+    public OrderPostServiceImpl(final OrderPostRepository repo) {
+        this.repo = repo;
     }
     
     @Override
     public Order save(final Order order) {
-        return orderPostRepository.save(order);
+        return repo.save(order);
     }
 }

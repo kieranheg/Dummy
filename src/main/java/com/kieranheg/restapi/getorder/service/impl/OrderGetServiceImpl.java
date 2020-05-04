@@ -9,14 +9,14 @@ import java.util.Optional;
 
 @Service
 class OrderGetServiceImpl implements OrderGetService {
-    private final OrderGetRepository orderGetRepository;
+    private final OrderGetRepository repo;
     
-    public OrderGetServiceImpl(final OrderGetRepository orderGetRepository) {
-        this.orderGetRepository = orderGetRepository;
+    public OrderGetServiceImpl(final OrderGetRepository repo) {
+        this.repo = repo;
     }
     
     @Override
     public Optional<Order> findById(final String id) {
-        return orderGetRepository.findById(id);
+        return repo.findById(id);
     }
 }
