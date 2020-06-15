@@ -38,18 +38,18 @@ public class OrderPostController_UT {
     void givenValidOrderReturnsCreatedOrder() throws Exception {
         Order postOrder = Order.builder().name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
         Order mockOrder = Order.builder().id(POST_ORDER_ID).name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
-    
+        
         given(service.save(postOrder)).willReturn(mockOrder);
-    
+        
         mockMvc.perform(post(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(postOrder)))
-            
+                
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            
+                
                 .andExpect(header().string(HttpHeaders.LOCATION, baseUrl + POST_ORDER_ID))
-            
+                
                 .andExpect(jsonPath("$.id", is(POST_ORDER_ID)))
                 .andExpect(jsonPath("$.name", is(ORDER_NAME)))
                 .andExpect(jsonPath("$.quantity", is(ORDER_QUANTITY)));
@@ -63,4 +63,10 @@ public class OrderPostController_UT {
         mockMvc.perform(post(baseUrl))
                 .andExpect(status().isInternalServerError());
     }
+    
+    private void x() {
+        System.out.println();
+    }
+    
+    
 }

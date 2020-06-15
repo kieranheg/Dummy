@@ -45,5 +45,6 @@ dependencies {
     testImplementation 'com.github.database-rider:rider-junit5:1.10.1'
     testCompileOnly 'org.dbunit:dbunit:2.6.0'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testCompile 'io.rest-assured:scala-support:4.0.0'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
