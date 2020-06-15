@@ -41,7 +41,7 @@ public class Order_IT {
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String QUANTITY = "quantity";
-    private static final String DUMMY_ORDER_1 = "DUMMY ORDER 1";
+    private static final String DUMMY_ORDER_1 = "Dummy Order 1";
     
     @LocalServerPort
     private int port;
@@ -137,6 +137,43 @@ public class Order_IT {
     
     @Test
     @DataSet("orders.yml")
+    @DisplayName("Test Get with valid Order id - success")
+    public void givenValidGetOrderRequestReturnSuccess() {
+        RestAssured.port = port;
+        RestAssured.baseURI = SERVER_URL;
+        RestAssured.basePath = getUrl;
+        
+        with()
+                .pathParam(ID, CAN_FIND_ID_1)
+                .contentType(JSON)
+                .when()
+                .get("/{id}")
+                .then()
+                .statusCode(OK.value())
+                .body(ID, equalTo(CAN_FIND_ID_1))
+                .body(NAME, equalTo(DUMMY_ORDER_1))
+                .body(QUANTITY, equalTo(987));
+    }
+    
+    @Test
+    @DataSet("orders.yml")
+    @DisplayName("Test Get with valid Order id - fails")
+    public void givenInvalidGetOrderRequestReturnNotFound() {
+        RestAssured.port = port;
+        RestAssured.baseURI = SERVER_URL;
+        RestAssured.basePath = getUrl;
+        
+        with()
+                .pathParam(ID, NOT_FOUND_ID)
+                .contentType(JSON)
+                .when()
+                .get("/{id}")
+                .then()
+                .statusCode(NOT_FOUND.value());
+    }
+    
+    @Test
+    @DataSet("orders.yml")
     @DisplayName("Test Post with valid Order - success")
     public void givenValidPostOrderGivenValidGetRequestReturnSuccess() {
         RestAssured.port = port;
@@ -144,7 +181,7 @@ public class Order_IT {
         RestAssured.basePath = postUrl;
         
         Order orderResponseFromPost = with()
-                .body(new Order()
+                .body(Order
                         .builder()
                         .id(123321123)
                         .name(DUMMY_ORDER_1)
@@ -181,7 +218,7 @@ public class Order_IT {
         RestAssured.basePath = postUrl;
         
         with()
-                .body(new Order()
+                .body(Order
                         .builder()
                         .id(123321123)
                         .name(DUMMY_ORDER_1)
@@ -198,7 +235,7 @@ public class Order_IT {
         RestAssured.basePath = getUrl;
         // now get it and ensure data is good
         with()
-                .pathParam(ID, 999999876)
+                .pathParam(ID, NOT_FOUND_ID)
                 .contentType(JSON)
                 .when()
                 .get("/{id}")
