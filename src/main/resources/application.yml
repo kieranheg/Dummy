@@ -7,3 +7,4 @@ spring:
 url:
   get-order: /v1-0/order/
   post-order: /v1-0/order/new
+  put-order: /v1-0/order/

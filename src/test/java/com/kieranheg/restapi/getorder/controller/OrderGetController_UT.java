@@ -11,16 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.kieranheg.utils.JacksonMapperHelper.asJsonString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = OrderGetController.class)
 public class OrderGetController_UT {
+    private static final String RESOURCE_PATH = "{id}";
     private static final Integer CAN_FIND_ID = 123456789;
     private static final Integer NOT_FOUND_ID = 173773754;
     private static final Integer BAD_PARAM_ID = 26;
@@ -50,7 +46,7 @@ public class OrderGetController_UT {
         
         given(service.findById(CAN_FIND_ID)).willReturn(Optional.of(mockOrder));
         
-        mockMvc.perform(get(baseUrl + "{id}", CAN_FIND_ID)
+        mockMvc.perform(get(baseUrl + RESOURCE_PATH, CAN_FIND_ID)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(mockOrder)))
                 
@@ -71,20 +67,16 @@ public class OrderGetController_UT {
         
         mockMvc.perform(get(baseUrl + NOT_FOUND_ID)
                 .contentType(APPLICATION_JSON))
+                
                 .andExpect(status().isNotFound());
     }
     
     @Test
     @DisplayName("GET for invalid order id - Bad request")
-    void givenInvalidOrderIdReturnsOrderNotFound() throws Exception {
-        Set<ConstraintViolation<?>> violations = new HashSet<>();
-        violations.add(mock(ConstraintViolation.class));
-        ConstraintViolationException constraintViolationException = mock(ConstraintViolationException.class);
-        
-        given(service.findById(BAD_PARAM_ID)).willThrow(constraintViolationException);
-        
-        mockMvc.perform(get(baseUrl + "{id}", BAD_PARAM_ID)
+    void givenInvalidOrderIdReturnsOrderBadRequest() throws Exception {
+        mockMvc.perform(get(baseUrl + RESOURCE_PATH, BAD_PARAM_ID)
                 .contentType(APPLICATION_JSON))
+                
                 .andExpect(status().isBadRequest());
     }
 }

@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = OrderPostController.class)
 public class OrderPostController_UT {
-    private static final Integer POST_ORDER_ID = 123456789;
     private static final String ORDER_NAME = "Sample Order";
+    private static final Integer POST_ORDER_ID = 123456789;
     private static final Integer ORDER_QUANTITY = 999;
     
     @MockBean
@@ -35,7 +35,7 @@ public class OrderPostController_UT {
     
     @Test
     @DisplayName("POST for valid order - Ok")
-    void givenValidOrderReturnsCreatedOrder() throws Exception {
+    void givenValidPostOrderReturnsCreatedOrder() throws Exception {
         Order postOrder = Order.builder().name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
         Order mockOrder = Order.builder().id(POST_ORDER_ID).name(ORDER_NAME).quantity(ORDER_QUANTITY).build();
         

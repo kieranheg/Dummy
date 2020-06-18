@@ -2,17 +2,19 @@ package com.kieranheg.restapi.getorder.controller;
 
 import com.kieranheg.restapi.auxiliary.validation.ValidOrderId;
 import com.kieranheg.restapi.getorder.service.OrderGetService;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @Validated
@@ -38,9 +40,9 @@ public class OrderGetController {
                                 .location(new URI(url + order.getId()))
                                 .body(order);
                     } catch (URISyntaxException e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                        return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
                     }
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.status(NOT_FOUND).build());
     }
 }

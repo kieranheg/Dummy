@@ -42,6 +42,7 @@ public class Order_IT {
     private static final String NAME = "name";
     private static final String QUANTITY = "quantity";
     private static final String DUMMY_ORDER_1 = "Dummy Order 1";
+    private static final String RESOURCE_PATH = "/{id}";
     
     @LocalServerPort
     private int port;
@@ -52,6 +53,8 @@ public class Order_IT {
     @Value("${url.post-order}")
     private String postUrl;
     
+    @Value("${url.put-order}")
+    private String putUrl;
     
     private TestRestTemplate testRestTemplate;
     private HttpEntity<Object> requestEntity;
@@ -147,7 +150,7 @@ public class Order_IT {
                 .pathParam(ID, CAN_FIND_ID_1)
                 .contentType(JSON)
                 .when()
-                .get("/{id}")
+                .get(RESOURCE_PATH)
                 .then()
                 .statusCode(OK.value())
                 .body(ID, equalTo(CAN_FIND_ID_1))
@@ -167,7 +170,7 @@ public class Order_IT {
                 .pathParam(ID, NOT_FOUND_ID)
                 .contentType(JSON)
                 .when()
-                .get("/{id}")
+                .get(RESOURCE_PATH)
                 .then()
                 .statusCode(NOT_FOUND.value());
     }
@@ -175,7 +178,7 @@ public class Order_IT {
     @Test
     @DataSet("orders.yml")
     @DisplayName("Test Post with valid Order - success")
-    public void givenValidPostOrderGivenValidGetRequestReturnSuccess() {
+    public void givenValidPostOrderRequestReturnSuccess() {
         RestAssured.port = port;
         RestAssured.baseURI = SERVER_URL;
         RestAssured.basePath = postUrl;
@@ -201,7 +204,7 @@ public class Order_IT {
                 .pathParam(ID, orderResponseFromPost.getId())
                 .contentType(JSON)
                 .when()
-                .get("/{id}")
+                .get(RESOURCE_PATH)
                 .then()
                 .statusCode(OK.value())
                 .body(ID, equalTo(orderResponseFromPost.getId()))
@@ -238,9 +241,46 @@ public class Order_IT {
                 .pathParam(ID, NOT_FOUND_ID)
                 .contentType(JSON)
                 .when()
-                .get("/{id}")
+                .get(RESOURCE_PATH)
                 .then()
                 .statusCode(NOT_FOUND.value());
+    }
+    
+    @Test
+    @DataSet("orders.yml")
+    @DisplayName("Test Put with valid Order - success")
+    public void givenValidPutOrderRequestReturnSuccess() {
+        RestAssured.port = port;
+        RestAssured.baseURI = SERVER_URL;
+        RestAssured.basePath = putUrl;
+        
+        Order orderResponseFromPost = with()
+                .pathParam(ID, CAN_FIND_ID_1)
+                .body(Order
+                        .builder()
+                        .id(CAN_FIND_ID_1)
+                        .name(DUMMY_ORDER_1)
+                        .quantity(849)
+                        .build())
+                .contentType(JSON)
+                .when()
+                .put(RESOURCE_PATH)
+                .then()
+                .statusCode(OK.value())
+                .extract()
+                .as(Order.class);
+        
+        // now get it and ensure data is good
+        with()
+                .pathParam(ID, CAN_FIND_ID_1)
+                .contentType(JSON)
+                .when()
+                .get(RESOURCE_PATH)
+                .then()
+                .statusCode(OK.value())
+                .body(ID, equalTo(orderResponseFromPost.getId()))
+                .body(NAME, equalTo(DUMMY_ORDER_1))
+                .body(QUANTITY, equalTo(849));
     }
     
     private String buildGetUrlWithoutResource() {

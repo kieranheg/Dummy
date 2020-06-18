@@ -3,7 +3,6 @@ package com.kieranheg.restapi.postorder.controller;
 import com.kieranheg.restapi.postorder.model.Order;
 import com.kieranheg.restapi.postorder.service.OrderPostService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestController
 @Validated
@@ -36,7 +37,7 @@ public class OrderPostController {
                     .created(new URI(url + newOrder.getId()))
                     .body(newOrder);
         } catch (URISyntaxException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
 }
