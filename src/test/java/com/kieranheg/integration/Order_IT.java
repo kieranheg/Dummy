@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -32,10 +34,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @ExtendWith({DBUnitExtension.class, SpringExtension.class})
 @SpringBootTest(classes = RestApi.class, webEnvironment = RANDOM_PORT)
 public class Order_IT {
-    private static final Integer CAN_FIND_ID_1 = 123456789;
-    private static final Integer CAN_FIND_ID_2 = 987654321;
-    private static final Integer NOT_FOUND_ID = 173773779;
-    private static final Integer INVALID_ID = 19;
+    private static final int CAN_FIND_ID_1 = 123456789;
+    private static final int CAN_FIND_ID_2 = 987654321;
+    private static final int NOT_FOUND_ID = 173773779;
+    private static final int INVALID_ID = 19;
     
     private static final String SERVER_URL = "http://localhost";
     private static final String ID = "id";
@@ -98,6 +100,25 @@ public class Order_IT {
         softly.assertThat(response.getBody().getId()).isEqualTo(CAN_FIND_ID_2);
         softly.assertThat(response.getBody().getName()).isEqualTo("Dummy Order 2");
         softly.assertThat(response.getBody().getQuantity()).isEqualTo(321);
+        softly.assertAll();
+    }
+    
+    @DataSet("orders.yml")
+    @ParameterizedTest
+    @ValueSource(ints = {CAN_FIND_ID_1, CAN_FIND_ID_2})
+    @DisplayName("Test findById with a several valid IDs - success")
+    public void givenSeveralValidOrderIdsRepositoryReturnsOrders(Integer id) {
+        ResponseEntity<Order> response =
+                testRestTemplate.exchange(buildGetUrlWithResource(id), GET, requestEntity, new ParameterizedTypeReference<Order>() {
+                });
+        
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(response.getStatusCode()).isEqualTo(OK);
+        softly.assertThat(response.getHeaders().getContentType()).isEqualTo(APPLICATION_JSON);
+        softly.assertThat(response.getBody()).isNotNull();
+        softly.assertThat(response.getBody().getId()).isEqualTo(id);
+        softly.assertThat(response.getBody().getName()).isNotNull();
+        softly.assertThat(response.getBody().getQuantity()).isNotNull();
         softly.assertAll();
     }
     
@@ -248,7 +269,7 @@ public class Order_IT {
     
     @Test
     @DataSet("orders.yml")
-    @DisplayName("Test Put with valid Order - success")
+    @DisplayName("Test Put to update valid Order - success")
     public void givenValidPutOrderRequestReturnSuccess() {
         RestAssured.port = port;
         RestAssured.baseURI = SERVER_URL;

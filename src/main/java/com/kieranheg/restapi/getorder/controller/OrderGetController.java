@@ -2,6 +2,7 @@ package com.kieranheg.restapi.getorder.controller;
 
 import com.kieranheg.restapi.auxiliary.validation.ValidOrderId;
 import com.kieranheg.restapi.getorder.service.OrderGetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Slf4j
 @RestController
 @Validated
 @RequestMapping("${url.get-order}")
@@ -32,6 +34,9 @@ public class OrderGetController {
     
     @GetMapping(path = "{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getOrder(final @PathVariable("id") @ValidOrderId Integer id) {
+        log.debug("Inside getOrder debug");
+        log.info("Inside getOrder info ");
+        log.error("Inside getOrder error");
         return service.findById(id)
                 .map(order -> {
                     try {

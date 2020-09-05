@@ -22,7 +22,7 @@ public class OrderPutServiceImpl implements OrderPutService {
     }
     
     @Override
-    public boolean update(final Order updateOrder) {
-        return false;
+    public boolean update(final Order updatedOrder) {
+        return repo.update(updatedOrder);
     }
 }

@@ -42,4 +42,12 @@ class OrderPutRepositoryImpl implements OrderPutRepository {
             return Optional.empty();
         }
     }
+    
+    @Override
+    public boolean update(final Order updatedOrder) {
+        return jdbcTemplate.update("UPDATE orders SET name = ?, quantity = ? WHERE id = ?",
+                updatedOrder.getName(),
+                updatedOrder.getQuantity(),
+                updatedOrder.getId()) == 1;
+    }
 }
